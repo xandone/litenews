@@ -1,64 +1,49 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_refresh/easy_refresh.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-import 'package:litenews/db/hello_item_dao.dart';
 import 'package:litenews/models/convert_utils.dart';
-import 'package:objectbox/objectbox.dart';
 
+import '../../db/hello_item_dao.dart';
 import '../../db/objectbox.dart';
 import '../../http/api.dart';
-import '../../http/http_dio.dart';
 import '../../models/hellogithub/hello_item_bean.dart';
-import '../../objectbox.g.dart';
 import '../../res/colors.dart';
 import '../../utils/logger.dart';
-import 'hello_details.dart';
+import '../hellogithub/hello_details.dart';
 
-class MainHellogithubPage extends StatefulWidget {
-  const MainHellogithubPage({super.key});
-
+class CollectPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    return MainHellogithubState();
+    return ColectState();
   }
 }
 
-class MainHellogithubState extends State<MainHellogithubPage> {
+class ColectState extends State<CollectPage> {
   List<HelloItemBean> datas = [];
-
   late ObjectBox objectbox;
 
   @override
   void initState() {
     super.initState();
-
-    // init();
-
-    getList();
+    init();
   }
 
   void init() async {
     objectbox = await ObjectBox.create();
+    getList();
   }
 
   void getList() async {
-    Map<String, dynamic> params = Map();
-    params['sort_by'] = 'featured';
-    params['rank_by'] = 'newest';
-    params['tid'] = 'all';
-    params['page'] = 2;
-
-    Log.d("开始刷新");
-    var result = await MyHttp.instance
-        .get('v1/', baseUrl: Api.HELLOGITHUB_API, queryParameters: params);
-
+    Stream<List<HelloItemDao>> dao = objectbox.getNotes();
     setState(() {
       datas.clear();
-      Log.d('result=$result');
-      for (var item in result['data']) {
-        datas.add(HelloItemBean.fromJson(item));
-      }
+      dao.first.then((list) {
+        for (var it in list) {
+          HelloItemBean bean=ConvertUtils.getHelloItemBean(it);
+          datas.add(bean);
+        }
+      });
     });
   }
 
@@ -66,7 +51,7 @@ class MainHellogithubState extends State<MainHellogithubPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text('首页'),
+        title: const Text('收藏'),
       ),
       body: EasyRefresh(
         onRefresh: () {
@@ -181,44 +166,10 @@ class MainHellogithubState extends State<MainHellogithubPage> {
                     );
                   }));
                 },
-                onLongPress: () {
-                  _showDialog(datas[index]);
-                },
+                onLongPress: () {},
               );
             }),
       ),
     );
-  }
-
-  // 显示对话框的方法
-  void _showDialog(HelloItemBean bean) async {
-    await showDialog(
-      context: context,
-      builder: (context) {
-        return AlertDialog(
-          title: const Text('是否收藏该文章'),
-          content: Text(bean.title),
-          actions: <Widget>[
-            ElevatedButton(
-              child: const Text('确定'),
-              onPressed: () {
-                save2Db(bean);
-                Navigator.of(context).pop(); // 关闭对话框
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-  void save2Db(HelloItemBean bean) async {
-    objectbox.addNote(bean);
-    Stream<List<HelloItemDao>> dao = objectbox.getNotes();
-    dao.first.then((list) {
-      for (var it in list) {
-        Log.d(it.title);
-      }
-    });
   }
 }
