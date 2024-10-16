@@ -1,10 +1,16 @@
+
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
+import 'package:litenews/db/hello_item_dao.dart';
+import 'package:litenews/models/convert_utils.dart';
+import 'package:objectbox/objectbox.dart';
 
+import '../../db/objectbox.dart';
 import '../../http/api.dart';
 import '../../http/http_dio.dart';
 import '../../models/hellogithub/hello_item_bean.dart';
+import '../../objectbox.g.dart';
 import '../../res/colors.dart';
 import '../../utils/logger.dart';
 import 'hello_details.dart';
@@ -21,10 +27,19 @@ class MainHellogithubPage extends StatefulWidget {
 class MainHellogithubState extends State<MainHellogithubPage> {
   List<HelloItemBean> datas = [];
 
+  late ObjectBox objectbox;
+
   @override
   void initState() {
     super.initState();
+
+    init();
+
     getList();
+  }
+
+  void init() async {
+    objectbox = await ObjectBox.create();
   }
 
   void getList() async {
@@ -167,7 +182,7 @@ class MainHellogithubState extends State<MainHellogithubPage> {
                   }));
                 },
                 onLongPress: () {
-                  _showDialog(datas[index].title);
+                  _showDialog(datas[index]);
                 },
               );
             }),
@@ -176,17 +191,18 @@ class MainHellogithubState extends State<MainHellogithubPage> {
   }
 
   // 显示对话框的方法
-  void _showDialog(String title) async {
+  void _showDialog(HelloItemBean bean) async {
     await showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
           title: const Text('是否收藏该文章'),
-          content: Text(title),
+          content: Text(bean.title),
           actions: <Widget>[
             ElevatedButton(
               child: const Text('确定'),
               onPressed: () {
+                save2Db(bean);
                 Navigator.of(context).pop(); // 关闭对话框
               },
             ),
@@ -194,5 +210,15 @@ class MainHellogithubState extends State<MainHellogithubPage> {
         );
       },
     );
+  }
+
+  void save2Db(HelloItemBean bean) async {
+    objectbox.addNote(bean);
+    Stream<List<HelloItemDao>> dao = objectbox.getNotes();
+    dao.first.then((list) {
+      for (var it in list) {
+        Log.d(it.title);
+      }
+    });
   }
 }
