@@ -2,6 +2,7 @@
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
+import 'package:litenews/db/hello_box.dart';
 import 'package:litenews/db/hello_item_dao.dart';
 import 'package:litenews/models/convert_utils.dart';
 import 'package:objectbox/objectbox.dart';
@@ -27,19 +28,21 @@ class MainHellogithubPage extends StatefulWidget {
 class MainHellogithubState extends State<MainHellogithubPage> {
   List<HelloItemBean> datas = [];
 
-  late ObjectBox objectbox;
+  late HelloBox helloBox;
 
   @override
   void initState() {
     super.initState();
 
-    // init();
+    init();
 
     getList();
   }
 
   void init() async {
-    objectbox = await ObjectBox.create();
+    helloBox=HelloBox();
+    Box<HelloItemDao> box = await ObjectBox().createBox<HelloItemDao>();
+    helloBox.initBox(box);
   }
 
   void getList() async {
@@ -49,13 +52,11 @@ class MainHellogithubState extends State<MainHellogithubPage> {
     params['tid'] = 'all';
     params['page'] = 2;
 
-    Log.d("开始刷新");
     var result = await MyHttp.instance
         .get('v1/', baseUrl: Api.HELLOGITHUB_API, queryParameters: params);
 
     setState(() {
       datas.clear();
-      Log.d('result=$result');
       for (var item in result['data']) {
         datas.add(HelloItemBean.fromJson(item));
       }
@@ -213,11 +214,11 @@ class MainHellogithubState extends State<MainHellogithubPage> {
   }
 
   void save2Db(HelloItemBean bean) async {
-    objectbox.addNote(bean);
-    Stream<List<HelloItemDao>> dao = objectbox.getNotes();
+    helloBox.addNote(bean);
+    Stream<List<HelloItemDao>> dao = helloBox.getNotes();
     dao.first.then((list) {
       for (var it in list) {
-        Log.d(it.title);
+        // Log.d(it.title);
       }
     });
   }

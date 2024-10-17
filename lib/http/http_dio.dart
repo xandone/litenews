@@ -123,7 +123,6 @@ class MyHttp {
     baseUrl ??= Api.HELLOGITHUB_API;
     data ??= {};
     try {
-      Log.d("登录接口..");
       if (withUserAuth) {
         //TODO
       }

@@ -4,10 +4,12 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:litenews/models/convert_utils.dart';
 
+import '../../db/hello_box.dart';
 import '../../db/hello_item_dao.dart';
 import '../../db/objectbox.dart';
 import '../../http/api.dart';
 import '../../models/hellogithub/hello_item_bean.dart';
+import '../../objectbox.g.dart';
 import '../../res/colors.dart';
 import '../../utils/logger.dart';
 import '../hellogithub/hello_details.dart';
@@ -21,7 +23,7 @@ class CollectPage extends StatefulWidget {
 
 class ColectState extends State<CollectPage> {
   List<HelloItemBean> datas = [];
-  late ObjectBox objectbox;
+  late HelloBox helloBox;
 
   @override
   void initState() {
@@ -30,17 +32,19 @@ class ColectState extends State<CollectPage> {
   }
 
   void init() async {
-    objectbox = await ObjectBox.create();
+    helloBox = HelloBox();
+    Box<HelloItemDao> box = await ObjectBox().createBox<HelloItemDao>();
+    helloBox.initBox(box);
     getList();
   }
 
   void getList() async {
-    Stream<List<HelloItemDao>> dao = objectbox.getNotes();
+    Stream<List<HelloItemDao>> dao = helloBox.getNotes();
     setState(() {
       datas.clear();
       dao.first.then((list) {
         for (var it in list) {
-          HelloItemBean bean=ConvertUtils.getHelloItemBean(it);
+          HelloItemBean bean = ConvertUtils.getHelloItemBean(it);
           datas.add(bean);
         }
       });

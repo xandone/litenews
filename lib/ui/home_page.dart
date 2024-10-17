@@ -16,7 +16,6 @@ class HomeState extends State<HomePage> {
   int _index = 0;
 
   void switchIndex(int index) {
-    Log.d('index=$index');
     setState(() {
       _index = index;
     });
@@ -32,7 +31,8 @@ class HomeState extends State<HomePage> {
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: MyColors.main_color,
+        selectedItemColor: MyColors.b1_color,
+        unselectedItemColor: MyColors.b3_color,
         currentIndex: _index,
         onTap: (index) => {switchIndex(index)},
         items: const [
