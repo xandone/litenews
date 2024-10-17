@@ -5,6 +5,7 @@ import 'package:litenews/ui/hellogithub/main_hellogithub.dart';
 import 'package:litenews/ui/mine/mine_page.dart';
 
 import '../utils/logger.dart';
+import 'news_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -34,7 +35,7 @@ class HomeState extends State<HomePage> {
       body: Center(
         child: IndexedStack(
           index: _index,
-          children: [MainHellogithubPage(), MinePage()],
+          children: [NewsPage(), MinePage()],
         ),
       ),
       bottomNavigationBar: BottomNavigationBar(

@@ -29,14 +29,20 @@ class MainHellogithubState extends State<MainHellogithubPage> {
   List<HelloItemBean> datas = [];
 
   late HelloBox helloBox;
+  late EasyRefreshController _refreshController;
 
   @override
   void initState() {
     super.initState();
 
+    _refreshController = EasyRefreshController(
+      controlFinishRefresh: true,
+      controlFinishLoad: true,
+    );
+
     init();
 
-    getList();
+    getList(false);
   }
 
   void init() async {
@@ -45,34 +51,50 @@ class MainHellogithubState extends State<MainHellogithubPage> {
     helloBox.initBox(box);
   }
 
-  void getList() async {
+  void getList(bool isMore) async {
+    int page = isMore ? datas.length ~/ 10 : 0;
+    page = page + 1;
+
     Map<String, dynamic> params = Map();
+    params['page'] = page;
     params['sort_by'] = 'featured';
     params['rank_by'] = 'newest';
     params['tid'] = 'all';
-    params['page'] = 2;
 
     var result = await MyHttp.instance
         .get('v1/', baseUrl: Api.HELLOGITHUB_API, queryParameters: params);
 
     setState(() {
-      datas.clear();
+      if (!isMore) {
+        _refreshController.finishRefresh();
+        _refreshController.resetFooter();
+        datas.clear();
+      }
       for (var item in result['data']) {
         datas.add(HelloItemBean.fromJson(item));
       }
+
+      _refreshController.finishLoad(result['has_more']
+          ? IndicatorResult.success
+          : IndicatorResult.noMore);
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    _refreshController.dispose();
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('首页'),
-      ),
       body: EasyRefresh(
+        controller: _refreshController,
         onRefresh: () {
-          getList();
+          getList(false);
         },
+        onLoad: () => getList(true),
         child: ListView.builder(
             itemCount: datas.length,
             itemBuilder: (BuildContext context, int index) {
