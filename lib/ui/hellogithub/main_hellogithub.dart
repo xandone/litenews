@@ -1,4 +1,3 @@
-
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
@@ -14,6 +13,7 @@ import '../../models/hellogithub/hello_item_bean.dart';
 import '../../objectbox.g.dart';
 import '../../res/colors.dart';
 import '../../utils/logger.dart';
+import '../../utils/my_dialog.dart';
 import 'hello_details.dart';
 
 class MainHellogithubPage extends StatefulWidget {
@@ -40,7 +40,7 @@ class MainHellogithubState extends State<MainHellogithubPage> {
   }
 
   void init() async {
-    helloBox=HelloBox();
+    helloBox = HelloBox();
     Box<HelloItemDao> box = await ObjectBox().createBox<HelloItemDao>();
     helloBox.initBox(box);
   }
@@ -191,16 +191,21 @@ class MainHellogithubState extends State<MainHellogithubPage> {
     );
   }
 
-  // 显示对话框的方法
+  void showAttachDialog(BuildContext ctx, HelloItemBean bean) {
+    MyDialog.showAttachDialog(context, '收藏');
+  }
+
+  @deprecated
   void _showDialog(HelloItemBean bean) async {
     await showDialog(
       context: context,
       builder: (context) {
         return AlertDialog(
-          title: const Text('是否收藏该文章'),
+          title: const Text('收藏'),
           content: Text(bean.title),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
           actions: <Widget>[
-            ElevatedButton(
+            TextButton(
               child: const Text('确定'),
               onPressed: () {
                 save2Db(bean);

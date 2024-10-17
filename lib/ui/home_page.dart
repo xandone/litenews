@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:litenews/db/objectbox.dart';
 import 'package:litenews/res/colors.dart';
 import 'package:litenews/ui/hellogithub/main_hellogithub.dart';
 import 'package:litenews/ui/mine/mine_page.dart';
@@ -22,6 +23,12 @@ class HomeState extends State<HomePage> {
   }
 
   @override
+  void dispose() {
+    super.dispose();
+    ObjectBox().close();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Center(
@@ -37,7 +44,7 @@ class HomeState extends State<HomePage> {
         onTap: (index) => {switchIndex(index)},
         items: const [
           BottomNavigationBarItem(icon: Icon(Icons.newspaper), label: '资讯'),
-          BottomNavigationBarItem(icon: Icon(Icons.my_library_add), label: '我的')
+          BottomNavigationBarItem(icon: Icon(Icons.account_box), label: '我的')
         ],
       ),
     );

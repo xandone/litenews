@@ -2,13 +2,13 @@ import 'package:cached_network_image/cached_network_image.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:litenews/models/convert_utils.dart';
 
 import '../../db/hello_box.dart';
 import '../../db/hello_item_dao.dart';
 import '../../db/objectbox.dart';
 import '../../http/api.dart';
-import '../../models/hellogithub/hello_item_bean.dart';
 import '../../objectbox.g.dart';
 import '../../res/colors.dart';
 import '../../utils/logger.dart';
@@ -21,9 +21,11 @@ class CollectPage extends StatefulWidget {
   }
 }
 
-class ColectState extends State<CollectPage> {
-  List<HelloItemBean> datas = [];
+class ColectState extends State<CollectPage>
+    with SingleTickerProviderStateMixin {
+  List<HelloItemDao> datas = [];
   late HelloBox helloBox;
+  late final controller = SlidableController(this);
 
   @override
   void initState() {
@@ -43,11 +45,16 @@ class ColectState extends State<CollectPage> {
     setState(() {
       datas.clear();
       dao.first.then((list) {
-        for (var it in list) {
-          HelloItemBean bean = ConvertUtils.getHelloItemBean(it);
-          datas.add(bean);
-        }
+        datas.addAll(list);
       });
+    });
+  }
+
+  void deleteItem(int index) async {
+    Log.d('itemDao.id=${datas[index].id}');
+    await helloBox.removeNote(datas[index].id);
+    setState(() {
+      datas.removeAt(index);
     });
   }
 
@@ -68,99 +75,139 @@ class ColectState extends State<CollectPage> {
                 child: Card(
                   margin: const EdgeInsets.fromLTRB(12, 8, 12, 0),
                   color: Colors.white,
-                  child: Padding(
-                      padding: const EdgeInsets.all(12),
-                      child: Row(
-                        children: [
-                          CachedNetworkImage(
-                            width: 50,
-                            height: 50,
-                            imageUrl: datas[index].author_avatar,
-                            placeholder: (context, url) =>
-                                CircularProgressIndicator(),
-                            errorWidget: (context, url, error) =>
-                                Icon(Icons.error),
-                            httpHeaders: {
-                              'referer': Api.HELLOGITHUB_API,
-                            },
-                          ),
-                          Expanded(
-                            child: Container(
-                                margin: const EdgeInsets.only(left: 10),
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Row(
+                  child: Slidable(
+                    // Specify a key if the Slidable is dismissible.
+                    key: const ValueKey(0),
+
+                    // The end action pane is the one at the right or the bottom side.
+                    endActionPane: ActionPane(
+                      motion: const ScrollMotion(),
+                      children: [
+                        SlidableAction(
+                          // An action can be bigger than the others.
+                          flex: 1,
+                          onPressed: (_) {
+                            deleteItem(index);
+                            controller.close();
+                          },
+                          backgroundColor: MyColors.r5_color,
+                          foregroundColor: Colors.white,
+                          icon: Icons.delete,
+                          label: '删除',
+                        ),
+                        // SlidableAction(
+                        //   flex: 1,
+                        //   onPressed: (_) => controller.close(),
+                        //   backgroundColor: const Color(0xFF0392CF),
+                        //   foregroundColor: Colors.white,
+                        //   icon: Icons.save,
+                        //   label: '置顶',
+                        // ),
+                      ],
+                    ),
+
+                    // The child of the Slidable is what the user sees when the
+                    // component is not dragged.
+                    child: Container(
+                      child: Padding(
+                          padding: const EdgeInsets.all(12),
+                          child: Row(
+                            children: [
+                              CachedNetworkImage(
+                                width: 50,
+                                height: 50,
+                                imageUrl: datas[index].author_avatar,
+                                placeholder: (context, url) =>
+                                    CircularProgressIndicator(),
+                                errorWidget: (context, url, error) =>
+                                    Icon(Icons.error),
+                                httpHeaders: {
+                                  'referer': Api.HELLOGITHUB_API,
+                                },
+                              ),
+                              Expanded(
+                                child: Container(
+                                    margin: const EdgeInsets.only(left: 10),
+                                    child: Column(
+                                      crossAxisAlignment:
+                                          CrossAxisAlignment.start,
                                       children: [
-                                        Expanded(
-                                            child: Text(
-                                          datas[index].title,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              fontSize: 16,
-                                              color: MyColors.b1_color),
-                                        )),
-                                        Visibility(
-                                            visible:
-                                                datas[index].comment_total > 0,
-                                            child: Container(
-                                              height: 16,
-                                              constraints:
-                                                  BoxConstraints(minWidth: 16),
-                                              // padding: EdgeInsets.all(2),
-                                              child: Text(
-                                                textAlign: TextAlign.center,
-                                                '${datas[index].comment_total}',
-                                                style: TextStyle(
-                                                    color: MyColors.white,
-                                                    fontSize: 12),
-                                              ),
-                                              decoration: BoxDecoration(
-                                                  color: MyColors.bl3_color,
-                                                  borderRadius:
-                                                      BorderRadius.all(
-                                                          Radius.circular(4))),
-                                            ))
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        Expanded(
-                                            child: Text(
-                                          datas[index].summary,
-                                          maxLines: 1,
-                                          overflow: TextOverflow.ellipsis,
-                                          style: TextStyle(
-                                              fontSize: 14,
-                                              color: MyColors.b2_color),
-                                        )),
-                                      ],
-                                    ),
-                                    Row(
-                                      children: [
-                                        Text(
-                                          datas[index].primary_lang,
-                                          style: TextStyle(
-                                              color: MyColors.b2_color,
-                                              fontSize: 12),
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                                child: Text(
+                                              datas[index].title,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontSize: 16,
+                                                  color: MyColors.b1_color),
+                                            )),
+                                            Visibility(
+                                                visible:
+                                                    datas[index].comment_total >
+                                                        0,
+                                                child: Container(
+                                                  height: 16,
+                                                  constraints: BoxConstraints(
+                                                      minWidth: 16),
+                                                  // padding: EdgeInsets.all(2),
+                                                  child: Text(
+                                                    textAlign: TextAlign.center,
+                                                    '${datas[index].comment_total}',
+                                                    style: TextStyle(
+                                                        color: MyColors.white,
+                                                        fontSize: 12),
+                                                  ),
+                                                  decoration: BoxDecoration(
+                                                      color: MyColors.bl3_color,
+                                                      borderRadius:
+                                                          BorderRadius.all(
+                                                              Radius.circular(
+                                                                  4))),
+                                                ))
+                                          ],
                                         ),
-                                        Padding(
-                                          padding: EdgeInsets.only(left: 10),
-                                          child: Text(
-                                            datas[index].updated_at,
-                                            style: TextStyle(
-                                                fontSize: 12,
-                                                color: MyColors.b2_color),
-                                          ),
+                                        Row(
+                                          children: [
+                                            Expanded(
+                                                child: Text(
+                                              datas[index].summary,
+                                              maxLines: 1,
+                                              overflow: TextOverflow.ellipsis,
+                                              style: TextStyle(
+                                                  fontSize: 14,
+                                                  color: MyColors.b2_color),
+                                            )),
+                                          ],
+                                        ),
+                                        Row(
+                                          children: [
+                                            Text(
+                                              datas[index].primary_lang,
+                                              style: TextStyle(
+                                                  color: MyColors.b2_color,
+                                                  fontSize: 12),
+                                            ),
+                                            Padding(
+                                              padding:
+                                                  EdgeInsets.only(left: 10),
+                                              child: Text(
+                                                datas[index].updated_at,
+                                                style: TextStyle(
+                                                    fontSize: 12,
+                                                    color: MyColors.b2_color),
+                                              ),
+                                            )
+                                          ],
                                         )
                                       ],
-                                    )
-                                  ],
-                                )),
-                          )
-                        ],
-                      )),
+                                    )),
+                              )
+                            ],
+                          )),
+                    ),
+                  ),
                 ),
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {

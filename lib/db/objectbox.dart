@@ -23,15 +23,18 @@ class ObjectBox {
   ObjectBox.create0();
 
   Future<Box<T>> createBox<T>() async {
-    String directory = p.join(
-        (await getApplicationDocumentsDirectory()).path, "litenews-db");
-    if(Store.isOpen(directory)){
+    String directory =
+        p.join((await getApplicationDocumentsDirectory()).path, "litenews-db");
+    if (Store.isOpen(directory)) {
       return _store.box<T>();
-    }else{
+    } else {
       _store = await openStore(
-          directory:directory,
-          macosApplicationGroup: "hellogithub.db");
+          directory: directory, macosApplicationGroup: "hellogithub.db");
     }
     return _store.box<T>();
+  }
+
+  void close() {
+    _store.close();
   }
 }
