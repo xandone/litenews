@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:litenews/ui/hellogithub/main_hellogithub.dart';
+import 'package:litenews/ui/webbooks/web_book_page.dart';
 
 import '52im/im_list_page.dart';
 
@@ -17,7 +18,7 @@ class NewsPageState extends State<NewsPage>
   @override
   void initState() {
     super.initState();
-    _tabController = TabController(length: 2, vsync: this);
+    _tabController = TabController(length: 3, vsync: this);
   }
 
   @override
@@ -46,12 +47,17 @@ class NewsPageState extends State<NewsPage>
                 Tab(
                   text: '52IM',
                 ),
+                Tab(
+                  text: 'webBooks',
+                )
               ],
             ),
             Expanded(
-              child: TabBarView(
-                  controller: _tabController,
-                  children: <Widget>[ImListPage(), ImListPage()]),
+              child: TabBarView(controller: _tabController, children: <Widget>[
+                WebBookPage(),
+                WebBookPage(),
+                WebBookPage(),
+              ]),
             )
           ],
         ),
