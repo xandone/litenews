@@ -1,3 +1,5 @@
+import 'dart:collection';
+
 import 'package:dio/dio.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +12,7 @@ import '../../utils/logger.dart';
 import 'package:html/dom.dart' as dom;
 import 'package:html/parser.dart' show parse;
 
-const kInitialTextSize = 100;
+const kInitialTextSize = 150;
 const kTextSizePlaceholder = 'TEXT_SIZE_PLACEHOLDER';
 const kTextSizeSourceJS = """
 window.addEventListener('DOMContentLoaded', function(event) {
@@ -48,25 +50,25 @@ class HelloDetalsState extends State<ImDetailsPage> {
 
     // getHtml();
 
-    updateTextSize(textSize);
+    // updateTextSize(textSize);
   }
 
   updateTextSize(int textSize) async {
     if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
-      await webViewController.setSettings(
+      await webViewController?.setSettings(
           settings: InAppWebViewSettings(textZoom: textSize));
     } else {
       // update current text size
-      await webViewController.evaluateJavascript(source: """
+      await webViewController?.evaluateJavascript(source: """
               document.body.style.textSizeAdjust = '$textSize%';
               document.body.style.webkitTextSizeAdjust = '$textSize%';
             """);
 
       // update the User Script for the next page load
-      await webViewController.removeUserScript(userScript: textSizeUserScript);
+      await webViewController?.removeUserScript(userScript: textSizeUserScript);
       textSizeUserScript.source =
           kTextSizeSourceJS.replaceAll(kTextSizePlaceholder, '$textSize');
-      await webViewController.addUserScript(userScript: textSizeUserScript);
+      await webViewController?.addUserScript(userScript: textSizeUserScript);
     }
   }
 
@@ -99,7 +101,32 @@ class HelloDetalsState extends State<ImDetailsPage> {
     return Scaffold(
       appBar: AppBar(
         title: Text('11111'),
+        actions: [
+          IconButton(
+              onPressed: () async {
+                textSize++;
+                await updateTextSize(textSize);
+              },
+              icon: const Icon(Icons.add)),
+          IconButton(
+              onPressed: () async {
+                textSize--;
+                await updateTextSize(textSize);
+              },
+              icon: const Icon(Icons.remove)),
+          TextButton(
+            onPressed: () async {
+              textSize = kInitialTextSize;
+              await updateTextSize(textSize);
+            },
+            child: const Text(
+              'Reset',
+              style: TextStyle(color: Colors.white),
+            ),
+          ),
+        ],
       ),
+
       body: getWebView(),
     );
   }
@@ -107,7 +134,12 @@ class HelloDetalsState extends State<ImDetailsPage> {
   InAppWebView getWebView() {
     return InAppWebView(
       initialUrlRequest: URLRequest(url: WebUri(itemId)),
-      onWebViewCreated: (InAppWebViewController controller) {
+      initialUserScripts: UnmodifiableListView(
+          !kIsWeb && defaultTargetPlatform == TargetPlatform.android
+              ? []
+              : [textSizeUserScript]),
+      initialSettings: InAppWebViewSettings(textZoom: textSize),
+      onWebViewCreated: (controller) async {
         webViewController = controller;
       },
     );
