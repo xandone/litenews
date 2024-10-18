@@ -54,14 +54,6 @@ class MyHttp {
     //   };
   }
 
-  /// Get请求，返回Map
-  /// * [path] 请求链接
-  /// * [cancel] 任务取消Token
-  /// * [queryParameters] 请求参数
-  /// * [header] 请求头
-  /// * [withApiAuth] 是否需要API认证
-  /// * [withUserAuth] 是否需要用户认证
-  /// * [isRetry] 是否重试
   Future<dynamic> get(
     String path, {
     Map<String, dynamic>? queryParameters,
@@ -73,9 +65,6 @@ class MyHttp {
     bool isRetry = false,
     ResponseType responseType = ResponseType.json,
   }) async {
-    if (withUserAuth) {
-      //TODO
-    }
     baseUrl ??= Api.HELLOGITHUB_API;
     queryParameters ??= {};
     try {
@@ -86,10 +75,6 @@ class MyHttp {
         options: Options(
           responseType: responseType,
           headers: header,
-          extra: {
-            "withApiAuth": withApiAuth,
-            "withUserAuth": withUserAuth,
-          },
         ),
         cancelToken: cancel,
       );
@@ -99,14 +84,6 @@ class MyHttp {
     }
   }
 
-  /// Post请求，返回Map
-  /// * [path] 请求链接
-  /// * [cancel] 任务取消Token
-  /// * [data] 内容
-  /// * [header] 请求头
-  /// * [withApiAuth] 是否需要API认证
-  /// * [withUserAuth] 是否需要用户认证
-  /// * [isRetry] 是否重试
   Future<dynamic> post(
     String path, {
     Map<String, dynamic>? data,
@@ -123,9 +100,6 @@ class MyHttp {
     baseUrl ??= Api.HELLOGITHUB_API;
     data ??= {};
     try {
-      if (withUserAuth) {
-        //TODO
-      }
       header ??= {};
 
       var result = await dio.post(
@@ -134,10 +108,6 @@ class MyHttp {
         options: Options(
           responseType: responseType,
           headers: header,
-          extra: {
-            "withApiAuth": withApiAuth,
-            "withUserAuth": withUserAuth,
-          },
           contentType: formUrlEncoded
               ? Headers.formUrlEncodedContentType
               : Headers.formUrlEncodedContentType,

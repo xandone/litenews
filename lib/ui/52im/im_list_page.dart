@@ -19,7 +19,7 @@ class ImListPage extends StatefulWidget {
   }
 }
 
-class ImListState extends State<ImListPage> {
+class ImListState extends State<ImListPage> with AutomaticKeepAliveClientMixin {
   List<ImItemBean> datas = [];
 
   @override
@@ -159,4 +159,7 @@ class ImListState extends State<ImListPage> {
       ),
     );
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }
