@@ -5,7 +5,7 @@
   "entities": [
     {
       "id": "1:7381230833836371102",
-      "lastPropertyId": "12:781047861833753994",
+      "lastPropertyId": "13:5572895895825256920",
       "name": "HelloItemDao",
       "properties": [
         {
@@ -68,6 +68,11 @@
           "id": "12:781047861833753994",
           "name": "updated_at",
           "type": 9
+        },
+        {
+          "id": "13:5572895895825256920",
+          "name": "type",
+          "type": 6
         }
       ],
       "relations": []

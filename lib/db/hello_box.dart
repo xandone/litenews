@@ -30,8 +30,8 @@ class HelloBox {
   /// few milliseconds, e.g. putting many objects, asynchronously.
   /// For this example only a single object is put which would also be fine if
   /// done using [Box.put].
-  Future<void> addNote(HelloItemBean bean) =>
-      _noteBox.putAsync(ConvertUtils.getHelloItemDao(bean));
+  Future<void> addNote(HelloItemDao bean) =>
+      _noteBox.putAsync(bean);
 
   Future<void> removeNote(int id) => _noteBox.removeAsync(id);
 }

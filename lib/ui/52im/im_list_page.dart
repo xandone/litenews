@@ -9,8 +9,13 @@ import 'package:html/parser.dart' show parse;
 import 'package:litenews/res/colors.dart';
 import 'package:litenews/ui/52im/im_details_page.dart';
 
+import '../../db/hello_box.dart';
+import '../../db/hello_item_dao.dart';
+import '../../db/objectbox.dart';
 import '../../http/api.dart';
+import '../../models/convert_utils.dart';
 import '../../models/im52/im_item_bean.dart';
+import '../../objectbox.g.dart';
 import '../../utils/logger.dart';
 
 class ImListPage extends StatefulWidget {
@@ -24,6 +29,7 @@ class ImListState extends State<ImListPage> with AutomaticKeepAliveClientMixin {
   List<ImItemBean> datas = [];
   late EasyRefreshController _refreshController;
   int pageIndex = 1;
+  late HelloBox helloBox;
 
   @override
   void initState() {
@@ -34,7 +40,15 @@ class ImListState extends State<ImListPage> with AutomaticKeepAliveClientMixin {
       controlFinishLoad: true,
     );
 
+    init();
+
     getList(false);
+  }
+
+  void init() async {
+    helloBox = HelloBox();
+    Box<HelloItemDao> box = await ObjectBox().createBox<HelloItemDao>();
+    helloBox.initBox(box);
   }
 
   @override
@@ -189,10 +203,42 @@ class ImListState extends State<ImListPage> with AutomaticKeepAliveClientMixin {
                             title: datas[index].title));
                   }))
                 },
+                onLongPress: () {
+                  _showDialog(datas[index]);
+                },
               );
             },
           )),
     );
+  }
+
+  void _showDialog(ImItemBean bean) async {
+    await showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog(
+          title: const Text('收藏'),
+          content: Text(bean.title),
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+          contentPadding:
+              EdgeInsets.only(left: 24, right: 24, top: 16, bottom: 10),
+          actions: <Widget>[
+            TextButton(
+              child: const Text('确定'),
+              onPressed: () {
+                save2Db(bean);
+                Navigator.of(context).pop(); // 关闭对话框
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+  void save2Db(ImItemBean bean) async {
+    helloBox.addNote(ConvertUtils.getHelloItemDaoByIM(bean));
+    Stream<List<HelloItemDao>> dao = helloBox.getNotes();
   }
 
   @override

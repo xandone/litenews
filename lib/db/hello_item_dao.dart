@@ -5,19 +5,21 @@ class HelloItemDao {
   @Id()
   int id;
 
-  HelloItemDao(
-      {this.id = 0,
-      required this.author,
-      required this.author_avatar,
-      required this.comment_total,
-      required this.item_id,
-      required this.name,
-      required this.primary_lang,
-      required this.summary,
-      required this.summary_en,
-      required this.title,
-      required this.title_en,
-      required this.updated_at});
+  HelloItemDao({
+    this.id = 0,
+    required this.type,
+    required this.item_id,
+    required this.primary_lang,
+    required this.title,
+    required this.updated_at,
+    this.author = '',
+    this.author_avatar = '',
+    this.comment_total = 0,
+    this.name = '',
+    this.summary = '',
+    this.summary_en = '',
+    this.title_en = '',
+  });
 
   String author;
   String author_avatar;
@@ -32,4 +34,5 @@ class HelloItemDao {
   String title_en;
 
   String updated_at;
+  int type;
 }

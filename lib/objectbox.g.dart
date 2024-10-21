@@ -22,7 +22,7 @@ final _entities = <obx_int.ModelEntity>[
   obx_int.ModelEntity(
       id: const obx_int.IdUid(1, 7381230833836371102),
       name: 'HelloItemDao',
-      lastPropertyId: const obx_int.IdUid(12, 781047861833753994),
+      lastPropertyId: const obx_int.IdUid(13, 5572895895825256920),
       flags: 0,
       properties: <obx_int.ModelProperty>[
         obx_int.ModelProperty(
@@ -84,6 +84,11 @@ final _entities = <obx_int.ModelEntity>[
             id: const obx_int.IdUid(12, 781047861833753994),
             name: 'updated_at',
             type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(13, 5572895895825256920),
+            name: 'type',
+            type: 6,
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
@@ -157,7 +162,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final titleOffset = fbb.writeString(object.title);
           final title_enOffset = fbb.writeString(object.title_en);
           final updated_atOffset = fbb.writeString(object.updated_at);
-          fbb.startTable(13);
+          fbb.startTable(14);
           fbb.addInt64(0, object.id);
           fbb.addOffset(1, authorOffset);
           fbb.addOffset(2, author_avatarOffset);
@@ -170,6 +175,7 @@ obx_int.ModelDefinition getObjectBoxModel() {
           fbb.addOffset(9, titleOffset);
           fbb.addOffset(10, title_enOffset);
           fbb.addOffset(11, updated_atOffset);
+          fbb.addInt64(12, object.type);
           fbb.finish(fbb.endTable());
           return object.id;
         },
@@ -178,6 +184,17 @@ obx_int.ModelDefinition getObjectBoxModel() {
           final rootOffset = buffer.derefObject(0);
           final idParam =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+          final typeParam =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 28, 0);
+          final item_idParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 12, '');
+          final primary_langParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 16, '');
+          final titleParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 22, '');
+          final updated_atParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 26, '');
           final authorParam = const fb.StringReader(asciiOptimization: true)
               .vTableGet(buffer, rootOffset, 6, '');
           final author_avatarParam =
@@ -185,36 +202,28 @@ obx_int.ModelDefinition getObjectBoxModel() {
                   .vTableGet(buffer, rootOffset, 8, '');
           final comment_totalParam =
               const fb.Int64Reader().vTableGet(buffer, rootOffset, 10, 0);
-          final item_idParam = const fb.StringReader(asciiOptimization: true)
-              .vTableGet(buffer, rootOffset, 12, '');
           final nameParam = const fb.StringReader(asciiOptimization: true)
               .vTableGet(buffer, rootOffset, 14, '');
-          final primary_langParam =
-              const fb.StringReader(asciiOptimization: true)
-                  .vTableGet(buffer, rootOffset, 16, '');
           final summaryParam = const fb.StringReader(asciiOptimization: true)
               .vTableGet(buffer, rootOffset, 18, '');
           final summary_enParam = const fb.StringReader(asciiOptimization: true)
               .vTableGet(buffer, rootOffset, 20, '');
-          final titleParam = const fb.StringReader(asciiOptimization: true)
-              .vTableGet(buffer, rootOffset, 22, '');
           final title_enParam = const fb.StringReader(asciiOptimization: true)
               .vTableGet(buffer, rootOffset, 24, '');
-          final updated_atParam = const fb.StringReader(asciiOptimization: true)
-              .vTableGet(buffer, rootOffset, 26, '');
           final object = HelloItemDao(
               id: idParam,
+              type: typeParam,
+              item_id: item_idParam,
+              primary_lang: primary_langParam,
+              title: titleParam,
+              updated_at: updated_atParam,
               author: authorParam,
               author_avatar: author_avatarParam,
               comment_total: comment_totalParam,
-              item_id: item_idParam,
               name: nameParam,
-              primary_lang: primary_langParam,
               summary: summaryParam,
               summary_en: summary_enParam,
-              title: titleParam,
-              title_en: title_enParam,
-              updated_at: updated_atParam);
+              title_en: title_enParam);
 
           return object;
         })
@@ -272,4 +281,8 @@ class HelloItemDao_ {
   /// See [HelloItemDao.updated_at].
   static final updated_at =
       obx.QueryStringProperty<HelloItemDao>(_entities[0].properties[11]);
+
+  /// See [HelloItemDao.type].
+  static final type =
+      obx.QueryIntegerProperty<HelloItemDao>(_entities[0].properties[12]);
 }

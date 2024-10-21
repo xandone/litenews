@@ -244,7 +244,7 @@ class MainHellogithubState extends State<MainHellogithubPage>
   }
 
   void save2Db(HelloItemBean bean) async {
-    helloBox.addNote(bean);
+    helloBox.addNote(ConvertUtils.getHelloItemDaoByHello(bean));
     Stream<List<HelloItemDao>> dao = helloBox.getNotes();
     dao.first.then((list) {
       for (var it in list) {

@@ -8,7 +8,7 @@ import '../objectbox.g.dart';
 import '../utils/logger.dart';
 
 /// Provides access to the ObjectBox Store throughout the app.
-///
+///`dart run build_runner build`
 /// Create this in the apps main function.
 class ObjectBox {
   /// The Store of this app.
