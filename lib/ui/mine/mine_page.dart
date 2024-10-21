@@ -29,6 +29,16 @@ class MineState extends State<MinePage> {
                 }));
               },
             ),
+          ),
+          Card(
+            color: MyColors.white,
+            child: ListTile(
+              title: Text('备份'),
+              leading: Icon(Icons.archive),
+              onTap: () {
+
+              },
+            ),
           )
         ],
       ),
