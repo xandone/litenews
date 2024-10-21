@@ -30,9 +30,11 @@ class HelloDetalsState extends State<HelloDetailsPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: InAppWebView(
-        initialUrlRequest: URLRequest(
-            url: WebUri('${Api.HELLOGITHUB_PAGE}/repository/$itemId')),
+      body: SafeArea(
+        child: InAppWebView(
+          initialUrlRequest: URLRequest(
+              url: WebUri('${Api.HELLOGITHUB_PAGE}/repository/$itemId')),
+        ),
       ),
     );
   }

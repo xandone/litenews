@@ -25,7 +25,8 @@ class MainHellogithubPage extends StatefulWidget {
   }
 }
 
-class MainHellogithubState extends State<MainHellogithubPage> {
+class MainHellogithubState extends State<MainHellogithubPage>
+    with AutomaticKeepAliveClientMixin {
   List<HelloItemBean> datas = [];
 
   late HelloBox helloBox;
@@ -226,6 +227,8 @@ class MainHellogithubState extends State<MainHellogithubPage> {
           title: const Text('收藏'),
           content: Text(bean.title),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+          contentPadding:
+              EdgeInsets.only(left: 24, right: 24, top: 16, bottom: 10),
           actions: <Widget>[
             TextButton(
               child: const Text('确定'),
@@ -249,4 +252,7 @@ class MainHellogithubState extends State<MainHellogithubPage> {
       }
     });
   }
+
+  @override
+  bool get wantKeepAlive => true;
 }

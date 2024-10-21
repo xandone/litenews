@@ -100,33 +100,8 @@ class HelloDetalsState extends State<ImDetailsPage> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text('11111'),
-        actions: [
-          IconButton(
-              onPressed: () async {
-                textSize++;
-                await updateTextSize(textSize);
-              },
-              icon: const Icon(Icons.add)),
-          IconButton(
-              onPressed: () async {
-                textSize--;
-                await updateTextSize(textSize);
-              },
-              icon: const Icon(Icons.remove)),
-          TextButton(
-            onPressed: () async {
-              textSize = kInitialTextSize;
-              await updateTextSize(textSize);
-            },
-            child: const Text(
-              'Reset',
-              style: TextStyle(color: Colors.white),
-            ),
-          ),
-        ],
+        title: Text(widget.arguments.title),
       ),
-
       body: getWebView(),
     );
   }
@@ -155,6 +130,7 @@ class HelloDetalsState extends State<ImDetailsPage> {
 
 class ImDetailsArguments {
   final String itemId;
+  final String title;
 
-  ImDetailsArguments({required this.itemId});
+  ImDetailsArguments({required this.itemId, required this.title});
 }

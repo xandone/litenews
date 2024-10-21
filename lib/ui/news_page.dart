@@ -54,8 +54,8 @@ class NewsPageState extends State<NewsPage>
             ),
             Expanded(
               child: TabBarView(controller: _tabController, children: <Widget>[
-                WebBookPage(),
-                WebBookPage(),
+                MainHellogithubPage(),
+                ImListPage(),
                 WebBookPage(),
               ]),
             )
