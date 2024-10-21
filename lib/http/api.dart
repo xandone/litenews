@@ -8,4 +8,10 @@ class Api {
 
   ///https://book.flutterchina.club/
   static const FLUTTER_COMBAT = 'https://book.flutterchina.club/';
+
+  static const HELLO_ALGO = 'https://www.hello-algo.com/';
+
+  static const QIANGU_YIHAO = 'https://web.qianguyihao.com/';
+
+  static const LXF_PYTHON = 'https://liaoxuefeng.com/books/python/introduction/index.html';
 }

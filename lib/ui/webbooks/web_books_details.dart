@@ -6,7 +6,9 @@ import '../../http/api.dart';
 import '../../utils/logger.dart';
 
 class WebBooksDetails extends StatefulWidget {
-  WebBooksDetails({super.key});
+  WebBooksArguments arguments;
+
+  WebBooksDetails({super.key, required this.arguments});
 
   @override
   State<StatefulWidget> createState() {
@@ -15,6 +17,7 @@ class WebBooksDetails extends StatefulWidget {
 }
 
 class HelloDetalsState extends State<WebBooksDetails> {
+
   @override
   void initState() {
     super.initState();
@@ -25,9 +28,15 @@ class HelloDetalsState extends State<WebBooksDetails> {
     return Scaffold(
       body: SafeArea(
         child: InAppWebView(
-          initialUrlRequest: URLRequest(url: WebUri(Api.FLUTTER_COMBAT)),
+          initialUrlRequest: URLRequest(url: WebUri(widget.arguments.itemId)),
         ),
       ),
     );
   }
+}
+
+class WebBooksArguments {
+  String itemId;
+
+  WebBooksArguments({required this.itemId});
 }

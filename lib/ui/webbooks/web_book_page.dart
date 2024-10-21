@@ -3,6 +3,32 @@ import 'package:flutter_svg/svg.dart';
 import 'package:litenews/res/colors.dart';
 import 'package:litenews/ui/webbooks/web_books_details.dart';
 
+import '../../http/api.dart';
+import '../../models/webbooks/web_book_bean.dart';
+
+final books = [
+  WebBookBean(
+      book_name: 'flutter实战',
+      item_id: Api.FLUTTER_COMBAT,
+      icon: 'assets/images/flu_combat_logo.png',
+      isSvg: false),
+  WebBookBean(
+      book_name: 'hello算法',
+      item_id: Api.HELLO_ALGO,
+      icon: 'assets/images/hello_algo.svg',
+      isSvg: true),
+  WebBookBean(
+      book_name: '千古前端',
+      item_id: Api.QIANGU_YIHAO,
+      icon: 'assets/images/qiangu.png',
+      isSvg: false),
+  WebBookBean(
+      book_name: '廖雪峰python',
+      item_id: Api.LXF_PYTHON,
+      icon: 'assets/images/lxf_python.svg',
+      isSvg: true),
+];
+
 class WebBookPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
@@ -16,60 +42,45 @@ class WebBookState extends State<WebBookPage> {
     return Scaffold(
       body: Padding(
         padding: EdgeInsets.all(12),
-        child: GridView(
+        child: GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 4,
             mainAxisSpacing: 20,
             crossAxisSpacing: 20,
           ),
-          children: [
-            GestureDetector(
-                child: const Column(
+          itemCount: books.length,
+          itemBuilder: (BuildContext context, int index) {
+            return GestureDetector(
+                child: Column(
                   children: [
-                    Expanded(
-                        child: Image(
-                      image: AssetImage('assets/images/flu_combat_logo.png'),
-                    )),
+                    Expanded(child: getIcon(books[index])),
                     Text(
-                      'flutter实战',
+                      books[index].book_name,
                       overflow: TextOverflow.ellipsis,
                     ),
                   ],
                 ),
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
-                    return WebBooksDetails();
+                    return WebBooksDetails(
+                      arguments:
+                          WebBooksArguments(itemId: books[index].item_id),
+                    );
                   }));
-                }),
-            Column(
-              children: [
-                Expanded(
-                    child: SvgPicture.asset(
-                  'assets/images/hello_algo.svg',
-                  colorFilter:
-                      ColorFilter.mode(Color(0XFF55aea6), BlendMode.srcIn),
-                )),
-                const Text(
-                  'hello算法',
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
-            const Column(
-              children: [
-                Expanded(
-                    child: Image(
-                  image: AssetImage('assets/images/qiangu.png'),
-                )),
-                Text(
-                  '千古前端',
-                  overflow: TextOverflow.ellipsis,
-                ),
-              ],
-            ),
-          ],
+                });
+          },
         ),
       ),
     );
+  }
+
+  Widget getIcon(WebBookBean bookBean) {
+    if (bookBean.isSvg) {
+      return SvgPicture.asset(bookBean.icon);
+    } else {
+      return Image(
+        image: AssetImage(bookBean.icon),
+      );
+    }
   }
 }
