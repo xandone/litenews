@@ -27,12 +27,18 @@ class ColectState extends State<CollectPage>
     with SingleTickerProviderStateMixin {
   List<HelloItemDao> datas = [];
   late HelloBox helloBox;
-  late final controller = SlidableController(this);
+  late final slidablecontroller = SlidableController(this);
 
   @override
   void initState() {
     super.initState();
     init();
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
+    slidablecontroller.dispose();
   }
 
   void init() async {
@@ -90,7 +96,7 @@ class ColectState extends State<CollectPage>
                           flex: 1,
                           onPressed: (_) {
                             deleteItem(index);
-                            controller.close();
+                            slidablecontroller.close();
                           },
                           backgroundColor: MyColors.r5_color,
                           foregroundColor: Colors.white,

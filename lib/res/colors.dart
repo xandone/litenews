@@ -13,5 +13,7 @@ class MyColors {
 
   static const Color bl3_color = Color(0XFFADC6FF);
   static const Color bl4_color = Color(0XFF85A5FF);
+  static const Color collection_color = Color(0XFFe6b800);
+  static const Color download_color = Color(0XFF6666ff);
 
 }

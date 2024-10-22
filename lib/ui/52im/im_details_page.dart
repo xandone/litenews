@@ -5,7 +5,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
+import 'package:flutter_widget_from_html/flutter_widget_from_html.dart';
 import 'package:gbk_codec/gbk_codec.dart';
+import 'package:litenews/res/colors.dart';
+import 'package:litenews/utils/my_dialog.dart';
 
 import '../../utils/logger.dart';
 
@@ -48,7 +51,7 @@ class HelloDetalsState extends State<ImDetailsPage> {
     itemId = widget.arguments.itemId;
     htmlData = '';
 
-    // getHtml();
+    getHtml();
 
     // updateTextSize(textSize);
   }
@@ -78,6 +81,7 @@ class HelloDetalsState extends State<ImDetailsPage> {
   }
 
   void getHtml() async {
+    MyDialog.showLoading();
     Dio dio = Dio();
     dio.options.headers['Content-Type'] = 'text/html; charset=gbk';
     dio.options.responseDecoder = gbkDecoder;
@@ -85,14 +89,12 @@ class HelloDetalsState extends State<ImDetailsPage> {
     String content = response.data.toString();
     dom.Document document = parse(content);
     var div = document.getElementById('postlist');
-    // var ss = div
-    //     ?.getElementsByClassName('t_fsz')
-    //     .first
-    //     .innerHtml;
+    var ss = div?.getElementsByClassName('t_fsz').first.innerHtml;
 
     setState(() {
-      htmlData = '<div>${div?.innerHtml}</div>';
+      htmlData = '<div>$ss</div>';
       Log.d('htmlData=$htmlData');
+      MyDialog.dismiss();
     });
   }
 
@@ -102,7 +104,7 @@ class HelloDetalsState extends State<ImDetailsPage> {
       appBar: AppBar(
         title: Text(widget.arguments.title),
       ),
-      body: getWebView(),
+      body: getHtmlWidget2(),
     );
   }
 
@@ -121,9 +123,28 @@ class HelloDetalsState extends State<ImDetailsPage> {
   }
 
   @deprecated
-  StatefulWidget getHtmlWidget() {
-    return Html(
-      data: htmlData,
+  Widget getHtmlWidget() {
+    return Container(
+      constraints: const BoxConstraints(minHeight: 200.0),
+      child: SingleChildScrollView(
+        child: Html(
+          data: htmlData,
+        ),
+      ),
+    );
+  }
+
+  Widget getHtmlWidget2() {
+    return SingleChildScrollView(
+      child: HtmlWidget(
+        htmlData,
+        // customStylesBuilder: (element) {
+        //   if (element.classes.contains('container')) {
+        //     return {'backgroud-color': 'red'};
+        //   }
+        //   return null;
+        // },
+      ),
     );
   }
 }

@@ -21,8 +21,8 @@ class MineState extends State<MinePage> {
           Card(
             color: MyColors.white,
             child: ListTile(
-              title: Text('收藏'),
-              leading: Icon(Icons.collections),
+              title: const Text('收藏'),
+              leading: const Icon(Icons.collections_bookmark),
               onTap: () {
                 Navigator.push(context, MaterialPageRoute(builder: (context) {
                   return CollectPage();
@@ -33,8 +33,8 @@ class MineState extends State<MinePage> {
           Card(
             color: MyColors.white,
             child: ListTile(
-              title: Text('备份'),
-              leading: Icon(Icons.archive),
+              title: const Text('备份'),
+              leading: const Icon(Icons.archive),
               onTap: () {
 
               },
