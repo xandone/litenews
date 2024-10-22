@@ -1,0 +1,1 @@
+enum DealType { collectionType, downloadType }
