@@ -257,7 +257,7 @@ class MainHellogithubState extends State<MainHellogithubPage>
                   }));
                 },
                 onLongPress: () {
-                  _showDialog(datas[index]);
+                  // _showDialog(datas[index]);
                 },
               );
             }),

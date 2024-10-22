@@ -16,6 +16,7 @@ import '../../res/colors.dart';
 import '../../utils/logger.dart';
 import '../52im/im_details_page.dart';
 import '../hellogithub/hello_details.dart';
+import '../hellogithub/hello_local_page.dart';
 
 class CollectPage extends StatefulWidget {
   final DealType dealType;
@@ -133,12 +134,20 @@ class ColectState extends State<CollectPage>
                   var arg;
                   switch (datas[index].type) {
                     case 1:
-                      arg = HelloDetailsPage(
-                        arguments: HelloDetailsArguments(
-                            itemId: datas[index].item_id,
-                            isFromDb: datas[index].local_content.isNotEmpty,
-                            mId: datas[index].id),
-                      );
+                      if(datas[index].local_content.isNotEmpty){
+                        arg = HelloLocalPage(
+                          arguments: HelloLocalArguments(
+                              title: datas[index].title,
+                              mId: datas[index].id),
+                        );
+                      }else{
+                        arg = HelloDetailsPage(
+                          arguments: HelloDetailsArguments(
+                              itemId: datas[index].item_id,
+                              isFromDb: datas[index].local_content.isNotEmpty,
+                              mId: datas[index].id),
+                        );
+                      }
                       break;
                     case 2:
                       arg = ImDetailsPage(

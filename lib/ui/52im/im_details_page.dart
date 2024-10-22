@@ -56,6 +56,7 @@ class HelloDetalsState extends State<ImDetailsPage> {
     // updateTextSize(textSize);
   }
 
+  @deprecated
   updateTextSize(int textSize) async {
     if (!kIsWeb && defaultTargetPlatform == TargetPlatform.android) {
       await webViewController?.setSettings(

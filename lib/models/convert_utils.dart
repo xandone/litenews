@@ -27,13 +27,15 @@ class ConvertUtils {
   static HelloItemDao getHelloItemDaoByIM(
       {required ImItemBean bean, String details = ''}) {
     return HelloItemDao(
-        type: 2,
-        deal_type: details.isEmpty ? 1 : 2,
-        comment_total: bean.comment_total,
-        item_id: bean.item_id,
-        primary_lang: bean.primary_lang,
-        title: bean.title,
-        updated_at: bean.updated_at);
+      type: 2,
+      deal_type: details.isEmpty ? 1 : 2,
+      comment_total: bean.comment_total,
+      item_id: bean.item_id,
+      primary_lang: bean.primary_lang,
+      title: bean.title,
+      updated_at: bean.updated_at,
+      local_content: details,
+    );
   }
 
   static HelloItemBean getHelloItemBean(HelloItemDao bean) {
