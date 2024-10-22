@@ -59,6 +59,7 @@ class ColectState extends State<CollectPage>
       datas.clear();
       dao.first.then((list) {
         datas.addAll(list);
+        Log.d(datas[0].local_content);
       });
     });
   }
@@ -133,8 +134,10 @@ class ColectState extends State<CollectPage>
                   switch (datas[index].type) {
                     case 1:
                       arg = HelloDetailsPage(
-                        arguments:
-                            HelloDetailsArguments(itemId: datas[index].item_id),
+                        arguments: HelloDetailsArguments(
+                            itemId: datas[index].item_id,
+                            isFromDb: datas[index].local_content.isNotEmpty,
+                            mId: datas[index].id),
                       );
                       break;
                     case 2:

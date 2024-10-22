@@ -36,4 +36,8 @@ class HelloBox {
   Future<void> addNote(HelloItemDao bean) => _noteBox.putAsync(bean);
 
   Future<void> removeNote(int id) => _noteBox.removeAsync(id);
+
+  Future<HelloItemDao?> readNote(int id) {
+    return _noteBox.getAsync(id);
+  }
 }

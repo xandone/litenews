@@ -304,7 +304,7 @@ class MainHellogithubState extends State<MainHellogithubPage>
     Response response =
         await dio.get('${Api.HELLOGITHUB_PAGE}/repository/${bean.item_id}');
     String content = response.data.toString();
-    Log.d(content);
+    // Log.d(content);
     helloBox.addNote(
         ConvertUtils.getHelloItemDaoByHello(bean: bean, details: content));
     MyDialog.dismiss();

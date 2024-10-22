@@ -7,19 +7,21 @@ class ConvertUtils {
   static HelloItemDao getHelloItemDaoByHello(
       {required HelloItemBean bean, String details = ''}) {
     return HelloItemDao(
-        type: 1,
-        deal_type: details.isEmpty ? 1 : 2,
-        author: bean.author,
-        author_avatar: bean.author_avatar,
-        comment_total: bean.comment_total,
-        item_id: bean.item_id,
-        name: bean.name,
-        primary_lang: bean.primary_lang,
-        summary: bean.summary,
-        summary_en: bean.summary_en,
-        title: bean.title,
-        title_en: bean.title_en,
-        updated_at: bean.updated_at);
+      type: 1,
+      deal_type: details.isEmpty ? 1 : 2,
+      author: bean.author,
+      author_avatar: bean.author_avatar,
+      comment_total: bean.comment_total,
+      item_id: bean.item_id,
+      name: bean.name,
+      primary_lang: bean.primary_lang,
+      summary: bean.summary,
+      summary_en: bean.summary_en,
+      title: bean.title,
+      title_en: bean.title_en,
+      updated_at: bean.updated_at,
+      local_content: details,
+    );
   }
 
   static HelloItemDao getHelloItemDaoByIM(
