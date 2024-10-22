@@ -8,6 +8,7 @@ class HelloItemDao {
   HelloItemDao({
     this.id = 0,
     required this.type,
+    required this.deal_type,
     required this.item_id,
     required this.primary_lang,
     required this.title,
@@ -19,6 +20,7 @@ class HelloItemDao {
     this.summary = '',
     this.summary_en = '',
     this.title_en = '',
+    this.local_content = '',
   });
 
   String author;
@@ -34,5 +36,11 @@ class HelloItemDao {
   String title_en;
 
   String updated_at;
+
+  //1-hello 2-IM52
   int type;
+
+  //1-收藏，2-下载
+  int deal_type;
+  String local_content;
 }

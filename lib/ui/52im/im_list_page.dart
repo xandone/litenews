@@ -237,8 +237,7 @@ class ImListState extends State<ImListPage> with AutomaticKeepAliveClientMixin {
   }
 
   void save2Db(ImItemBean bean) async {
-    helloBox.addNote(ConvertUtils.getHelloItemDaoByIM(bean));
-    Stream<List<HelloItemDao>> dao = helloBox.getNotes();
+    helloBox.addNote(ConvertUtils.getHelloItemDaoByIM(bean: bean));
   }
 
   @override

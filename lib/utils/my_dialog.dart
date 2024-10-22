@@ -23,8 +23,8 @@ class MyDialog {
     );
   }
 
-  static void showLoading() {
-    SmartDialog.showLoading(msg: "加载中");
+  static void showLoading({String msg = '加载中'}) {
+    SmartDialog.showLoading(msg: msg);
   }
 
   static void dismiss() {

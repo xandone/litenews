@@ -25,6 +25,8 @@ class HelloDetalsState extends State<HelloDetailsPage> {
   void initState() {
     super.initState();
     itemId = widget.arguments.itemId;
+    url = '${Api.HELLOGITHUB_PAGE}/repository/$itemId';
+    Log.d('url=$url');
   }
 
   @override
@@ -32,8 +34,7 @@ class HelloDetalsState extends State<HelloDetailsPage> {
     return Scaffold(
       body: SafeArea(
         child: InAppWebView(
-          initialUrlRequest: URLRequest(
-              url: WebUri('${Api.HELLOGITHUB_PAGE}/repository/$itemId')),
+          initialUrlRequest: URLRequest(url: WebUri(url)),
         ),
       ),
     );

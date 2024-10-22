@@ -4,9 +4,11 @@ import '../db/hello_item_dao.dart';
 import 'hellogithub/hello_item_bean.dart';
 
 class ConvertUtils {
-  static HelloItemDao getHelloItemDaoByHello(HelloItemBean bean) {
+  static HelloItemDao getHelloItemDaoByHello(
+      {required HelloItemBean bean, String details = ''}) {
     return HelloItemDao(
         type: 1,
+        deal_type: details.isEmpty ? 1 : 2,
         author: bean.author,
         author_avatar: bean.author_avatar,
         comment_total: bean.comment_total,
@@ -20,9 +22,11 @@ class ConvertUtils {
         updated_at: bean.updated_at);
   }
 
-  static HelloItemDao getHelloItemDaoByIM(ImItemBean bean) {
+  static HelloItemDao getHelloItemDaoByIM(
+      {required ImItemBean bean, String details = ''}) {
     return HelloItemDao(
         type: 2,
+        deal_type: details.isEmpty ? 1 : 2,
         comment_total: bean.comment_total,
         item_id: bean.item_id,
         primary_lang: bean.primary_lang,

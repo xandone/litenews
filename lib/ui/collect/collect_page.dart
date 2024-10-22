@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
 import 'package:litenews/models/convert_utils.dart';
+import 'package:litenews/ui/collect/deal_type.dart';
 
 import '../../db/hello_box.dart';
 import '../../db/hello_item_dao.dart';
@@ -17,6 +18,10 @@ import '../52im/im_details_page.dart';
 import '../hellogithub/hello_details.dart';
 
 class CollectPage extends StatefulWidget {
+  final DealType dealType;
+
+  const CollectPage({super.key, required this.dealType});
+
   @override
   State<StatefulWidget> createState() {
     return ColectState();
@@ -49,7 +54,7 @@ class ColectState extends State<CollectPage>
   }
 
   void getList() async {
-    Stream<List<HelloItemDao>> dao = helloBox.getNotes();
+    Stream<List<HelloItemDao>> dao = helloBox.getNotes(widget.dealType);
     setState(() {
       datas.clear();
       dao.first.then((list) {

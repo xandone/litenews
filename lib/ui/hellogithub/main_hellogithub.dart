@@ -1,4 +1,5 @@
 import 'package:cached_network_image/cached_network_image.dart';
+import 'package:dio/dio.dart';
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
@@ -132,7 +133,10 @@ class MainHellogithubState extends State<MainHellogithubPage>
                         ),
                         SlidableAction(
                           flex: 1,
-                          onPressed: (_) => slidablecontroller.close(),
+                          onPressed: (_) {
+                            download(datas[index]);
+                            slidablecontroller.close();
+                          },
                           backgroundColor: MyColors.download_color,
                           foregroundColor: Colors.white,
                           icon: Icons.download,
@@ -275,7 +279,7 @@ class MainHellogithubState extends State<MainHellogithubPage>
           content: Text(bean.title),
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
           contentPadding:
-              EdgeInsets.only(left: 24, right: 24, top: 16, bottom: 10),
+              const EdgeInsets.only(left: 24, right: 24, top: 16, bottom: 10),
           actions: <Widget>[
             TextButton(
               child: const Text('确定'),
@@ -291,7 +295,19 @@ class MainHellogithubState extends State<MainHellogithubPage>
   }
 
   void save2Db(HelloItemBean bean) async {
-    helloBox.addNote(ConvertUtils.getHelloItemDaoByHello(bean));
+    helloBox.addNote(ConvertUtils.getHelloItemDaoByHello(bean: bean));
+  }
+
+  void download(HelloItemBean bean) async {
+    MyDialog.showLoading(msg: '下载中');
+    Dio dio = Dio();
+    Response response =
+        await dio.get('${Api.HELLOGITHUB_PAGE}/repository/${bean.item_id}');
+    String content = response.data.toString();
+    Log.d(content);
+    helloBox.addNote(
+        ConvertUtils.getHelloItemDaoByHello(bean: bean, details: content));
+    MyDialog.dismiss();
   }
 
   @override
