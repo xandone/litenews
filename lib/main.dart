@@ -6,7 +6,6 @@ import 'package:litenews/ui/home_page.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  debugDefaultTargetPlatformOverride = TargetPlatform.android;
   runApp(const MyApp());
 }
 

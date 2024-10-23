@@ -15,6 +15,7 @@ import 'package:objectbox/objectbox.dart' as obx;
 import 'package:objectbox_flutter_libs/objectbox_flutter_libs.dart';
 
 import 'db/hello_item_dao.dart';
+import 'db/web_book_dao.dart';
 
 export 'package:objectbox/objectbox.dart'; // so that callers only have to import this file
 
@@ -102,6 +103,30 @@ final _entities = <obx_int.ModelEntity>[
             flags: 0)
       ],
       relations: <obx_int.ModelRelation>[],
+      backlinks: <obx_int.ModelBacklink>[]),
+  obx_int.ModelEntity(
+      id: const obx_int.IdUid(2, 1904223624420725282),
+      name: 'WebBookDao',
+      lastPropertyId: const obx_int.IdUid(3, 7450796131360977789),
+      flags: 0,
+      properties: <obx_int.ModelProperty>[
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(1, 6787879838144853288),
+            name: 'id',
+            type: 6,
+            flags: 1),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(2, 4297062931756158203),
+            name: 'item_id',
+            type: 9,
+            flags: 0),
+        obx_int.ModelProperty(
+            id: const obx_int.IdUid(3, 7450796131360977789),
+            name: 'current_url',
+            type: 9,
+            flags: 0)
+      ],
+      relations: <obx_int.ModelRelation>[],
       backlinks: <obx_int.ModelBacklink>[])
 ];
 
@@ -140,7 +165,7 @@ Future<obx.Store> openStore(
 obx_int.ModelDefinition getObjectBoxModel() {
   final model = obx_int.ModelInfo(
       entities: _entities,
-      lastEntityId: const obx_int.IdUid(1, 7381230833836371102),
+      lastEntityId: const obx_int.IdUid(2, 1904223624420725282),
       lastIndexId: const obx_int.IdUid(0, 0),
       lastRelationId: const obx_int.IdUid(0, 0),
       lastSequenceId: const obx_int.IdUid(0, 0),
@@ -246,6 +271,41 @@ obx_int.ModelDefinition getObjectBoxModel() {
               local_content: local_contentParam);
 
           return object;
+        }),
+    WebBookDao: obx_int.EntityDefinition<WebBookDao>(
+        model: _entities[1],
+        toOneRelations: (WebBookDao object) => [],
+        toManyRelations: (WebBookDao object) => {},
+        getId: (WebBookDao object) => object.id,
+        setId: (WebBookDao object, int id) {
+          object.id = id;
+        },
+        objectToFB: (WebBookDao object, fb.Builder fbb) {
+          final item_idOffset = fbb.writeString(object.item_id);
+          final current_urlOffset = fbb.writeString(object.current_url);
+          fbb.startTable(4);
+          fbb.addInt64(0, object.id);
+          fbb.addOffset(1, item_idOffset);
+          fbb.addOffset(2, current_urlOffset);
+          fbb.finish(fbb.endTable());
+          return object.id;
+        },
+        objectFromFB: (obx.Store store, ByteData fbData) {
+          final buffer = fb.BufferContext(fbData);
+          final rootOffset = buffer.derefObject(0);
+          final idParam =
+              const fb.Int64Reader().vTableGet(buffer, rootOffset, 4, 0);
+          final item_idParam = const fb.StringReader(asciiOptimization: true)
+              .vTableGet(buffer, rootOffset, 6, '');
+          final current_urlParam =
+              const fb.StringReader(asciiOptimization: true)
+                  .vTableGet(buffer, rootOffset, 8, '');
+          final object = WebBookDao(
+              id: idParam,
+              item_id: item_idParam,
+              current_url: current_urlParam);
+
+          return object;
         })
   };
 
@@ -313,4 +373,19 @@ class HelloItemDao_ {
   /// See [HelloItemDao.local_content].
   static final local_content =
       obx.QueryStringProperty<HelloItemDao>(_entities[0].properties[14]);
+}
+
+/// [WebBookDao] entity fields to define ObjectBox queries.
+class WebBookDao_ {
+  /// See [WebBookDao.id].
+  static final id =
+      obx.QueryIntegerProperty<WebBookDao>(_entities[1].properties[0]);
+
+  /// See [WebBookDao.item_id].
+  static final item_id =
+      obx.QueryStringProperty<WebBookDao>(_entities[1].properties[1]);
+
+  /// See [WebBookDao.current_url].
+  static final current_url =
+      obx.QueryStringProperty<WebBookDao>(_entities[1].properties[2]);
 }

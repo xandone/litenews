@@ -109,6 +109,7 @@ class HelloDetalsState extends State<ImDetailsPage> {
     );
   }
 
+  @deprecated
   InAppWebView getWebView() {
     return InAppWebView(
       initialUrlRequest: URLRequest(url: WebUri(itemId)),
