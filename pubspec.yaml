@@ -54,6 +54,7 @@ dependencies:
   gbk_codec: ^0.4.0
   flutter_svg: ^2.0.10+1
   flutter_widget_from_html: ^0.15.2
+  event_bus: ^2.0.1
 
 dependency_overrides:
 #  https://github:com/pichillilorenzo/flutter_inappwebview/issues/2150:

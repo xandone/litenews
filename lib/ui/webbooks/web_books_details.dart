@@ -1,3 +1,4 @@
+import 'package:event_bus/event_bus.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_html/flutter_html.dart';
 import 'package:flutter_inappwebview/flutter_inappwebview.dart';
@@ -5,6 +6,8 @@ import 'package:litenews/db/objectbox.dart';
 
 import '../../db/web_book_dao.dart';
 import '../../db/webbook_box.dart';
+import '../../event/EventBusUtils.dart';
+import '../../event/webbook_update_event.dart';
 import '../../http/api.dart';
 import '../../objectbox.g.dart';
 import '../../utils/logger.dart';
@@ -36,6 +39,8 @@ class HelloDetalsState extends State<WebBooksDetails> {
     super.dispose();
 
     if (currentUrl.isNotEmpty) {
+      EventBusUtils.getDefault()
+          .fire(Webbookupdateevent(currentUrl: currentUrl));
       saveDb();
     }
   }
@@ -60,8 +65,7 @@ class HelloDetalsState extends State<WebBooksDetails> {
                 url: WebUri(widget.arguments.currentUrl.isEmpty
                     ? widget.arguments.itemId
                     : widget.arguments.currentUrl)),
-            onWebViewCreated: (controller) async {
-            },
+            onWebViewCreated: (controller) async {},
             onUpdateVisitedHistory: (controller, url, isReload) {
               currentUrl = url!.uriValue.toString();
               Log.d('currentUrl=$currentUrl');

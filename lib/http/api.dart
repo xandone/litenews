@@ -14,4 +14,6 @@ class Api {
   static const QIANGU_YIHAO = 'https://web.qianguyihao.com/';
 
   static const LXF_PYTHON = 'https://liaoxuefeng.com/books/python/introduction/index.html';
+
+  static const GSY_HOME = 'https://guoshuyu.cn/home/wx/';
 }

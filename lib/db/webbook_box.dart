@@ -23,7 +23,7 @@ class WebbookBox {
         .map((query) => query.find());
   }
 
-  Stream<List<WebBookDao>> getNotesById(String itemId) {
+  Stream<WebBookDao?> getNotesById(String itemId) {
     // Query for all notes, sorted by their date.
     // https://docs.objectbox.io/queries
     final builder = _noteBox
@@ -31,10 +31,7 @@ class WebbookBox {
         .order(WebBookDao_.id, flags: Order.descending);
     // Build and watch the query,
     // set triggerImmediately to emit the query immediately on listen.
-    return builder
-        .watch(triggerImmediately: true)
-        // Map it to a list of notes to be used by a StreamBuilder.
-        .map((query) => query.find());
+    return builder.watch(triggerImmediately: true).map((query) => query.findFirst());
   }
 
   /// Add a note.
