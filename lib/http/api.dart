@@ -16,4 +16,6 @@ class Api {
   static const LXF_PYTHON = 'https://liaoxuefeng.com/books/python/introduction/index.html';
 
   static const GSY_HOME = 'https://guoshuyu.cn/home/wx/';
+
+  static const REAL_TIME_RENDERING_4TH = 'https://www.wolai.com/fkGSwxLu2pjWD7kiBY1V7W';
 }

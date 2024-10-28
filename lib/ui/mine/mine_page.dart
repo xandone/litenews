@@ -3,6 +3,7 @@ import 'package:litenews/res/colors.dart';
 import 'package:litenews/ui/collect/collect_page.dart';
 
 import '../collect/deal_type.dart';
+import 'about_data_page.dart';
 
 class MinePage extends StatefulWidget {
   @override
@@ -49,7 +50,11 @@ class MineState extends State<MinePage> {
             child: ListTile(
               title: const Text('数据来源'),
               leading: const Icon(Icons.data_exploration),
-              onTap: () {},
+              onTap: () {
+                Navigator.push(context, MaterialPageRoute(builder: (context) {
+                  return AboutDataPage();
+                }));
+              },
             ),
           ),
           Card(

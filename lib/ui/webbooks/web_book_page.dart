@@ -40,6 +40,11 @@ final books = [
       item_id: Api.GSY_HOME,
       icon: 'assets/images/gsy_flutter.png',
       isSvg: false),
+  WebBookBean(
+      book_name: 'RTR4',
+      item_id: Api.REAL_TIME_RENDERING_4TH,
+      icon: 'assets/images/ic_launcher.png',
+      isSvg: false),
 ];
 
 class WebBookPage extends StatefulWidget {
