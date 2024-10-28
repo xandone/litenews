@@ -44,7 +44,7 @@ class HomeState extends State<HomePage> {
         currentIndex: _index,
         onTap: (index) => {switchIndex(index)},
         items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.newspaper), label: '资讯'),
+          BottomNavigationBarItem(icon: Icon(Icons.newspaper), label: '内容'),
           BottomNavigationBarItem(icon: Icon(Icons.account_box), label: '我的')
         ],
       ),

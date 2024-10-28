@@ -47,11 +47,19 @@ class MineState extends State<MinePage> {
           Card(
             color: MyColors.white,
             child: ListTile(
+              title: const Text('数据来源'),
+              leading: const Icon(Icons.data_exploration),
+              onTap: () {},
+            ),
+          ),
+          Card(
+            color: MyColors.white,
+            child: ListTile(
               title: const Text('备份'),
               leading: const Icon(Icons.archive),
               onTap: () {},
             ),
-          )
+          ),
         ],
       ),
     );

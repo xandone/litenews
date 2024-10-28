@@ -20,8 +20,9 @@ import '../hellogithub/hello_local_page.dart';
 
 class CollectPage extends StatefulWidget {
   final DealType dealType;
+  final String title;
 
-  const CollectPage({super.key, required this.dealType});
+  const CollectPage({super.key, required this.dealType, this.title = ''});
 
   @override
   State<StatefulWidget> createState() {
@@ -134,13 +135,12 @@ class ColectState extends State<CollectPage>
                   var arg;
                   switch (datas[index].type) {
                     case 1:
-                      if(datas[index].local_content.isNotEmpty){
+                      if (datas[index].local_content.isNotEmpty) {
                         arg = HelloLocalPage(
                           arguments: HelloLocalArguments(
-                              title: datas[index].title,
-                              mId: datas[index].id),
+                              title: datas[index].title, mId: datas[index].id),
                         );
-                      }else{
+                      } else {
                         arg = HelloDetailsPage(
                           arguments: HelloDetailsArguments(
                               itemId: datas[index].item_id,
