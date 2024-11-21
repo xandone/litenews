@@ -45,6 +45,16 @@ final books = [
       item_id: Api.REAL_TIME_RENDERING_4TH,
       icon: 'assets/images/ic_launcher.png',
       isSvg: false),
+  WebBookBean(
+      book_name: '缺失的一课',
+      item_id: Api.MISSING_SEMESTER_CN,
+      icon: 'assets/images/ic_launcher.png',
+      isSvg: false),
+  WebBookBean(
+      book_name: 'GitLqr全栈',
+      item_id: Api.FULL_STACKACTION,
+      icon: 'assets/images/ic_launcher.png',
+      isSvg: false),
 ];
 
 class WebBookPage extends StatefulWidget {

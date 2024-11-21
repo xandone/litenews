@@ -13,6 +13,8 @@ final sDatas = [
   AboutDataBean(name: '廖雪峰python', item_id: Api.LXF_PYTHON),
   AboutDataBean(name: 'GSY_Flutter', item_id: Api.GSY_HOME),
   AboutDataBean(name: 'Real-Time Rendering 4th', item_id: Api.REAL_TIME_RENDERING_4TH),
+  AboutDataBean(name: '缺失的一课', item_id: Api.MISSING_SEMESTER_CN),
+  AboutDataBean(name: 'GitLqr全栈', item_id: Api.FULL_STACKACTION),
 ];
 
 class AboutDataPage extends StatelessWidget {

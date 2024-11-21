@@ -55,6 +55,7 @@ dependencies:
   flutter_svg: ^2.0.10+1
   flutter_widget_from_html: ^0.15.2
   event_bus: ^2.0.1
+  json_annotation: ^4.9.0
 
 dependency_overrides:
 #  https://github:com/pichillilorenzo/flutter_inappwebview/issues/2150:
@@ -64,7 +65,7 @@ dev_dependencies:
   flutter_test:
     sdk: flutter
 
-  build_runner: ^2.0.0
+  build_runner: ^2.4.13
   objectbox_generator: any
 
   # The "flutter_lints" package below contains a set of recommended lints to
@@ -75,6 +76,7 @@ dev_dependencies:
 
   # flutter_lints 3.0.0 requires Dart 3, but CI still testing down to Dart 2.19 (Flutter 3.7)
   flutter_lints: '>=2.0.3 <4.0.0'
+  json_serializable: ^6.8.0
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

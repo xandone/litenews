@@ -18,4 +18,8 @@ class Api {
   static const GSY_HOME = 'https://guoshuyu.cn/home/wx/';
 
   static const REAL_TIME_RENDERING_4TH = 'https://www.wolai.com/fkGSwxLu2pjWD7kiBY1V7W';
+
+  static const MISSING_SEMESTER_CN="https://missing-semester-cn.github.io/";
+
+  static const FULL_STACKACTION="https://www.fullstackaction.com/";
 }
