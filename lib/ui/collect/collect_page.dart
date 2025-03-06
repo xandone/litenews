@@ -250,7 +250,7 @@ class ColectState extends State<CollectPage>
                             textAlign: TextAlign.right,
                             'hello-github',
                             style: TextStyle(
-                                fontSize: 12, color: MyColors.main_color),
+                                fontSize: 12, color: MyColors.mainColor),
                           ))
                         ],
                       )
@@ -312,7 +312,7 @@ class ColectState extends State<CollectPage>
                   child: Text(
                     textAlign: TextAlign.right,
                     'IM52',
-                    style: TextStyle(fontSize: 12, color: MyColors.main_color),
+                    style: TextStyle(fontSize: 12, color: MyColors.mainColor),
                   ),
                 )
               ],
