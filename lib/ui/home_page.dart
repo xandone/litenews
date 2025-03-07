@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:litenews/db/objectbox.dart';
 import 'package:litenews/res/colors.dart';
-import 'package:litenews/ui/hellogithub/main_hellogithub.dart';
 import 'package:litenews/ui/mine/mine_page.dart';
 
-import '../utils/logger.dart';
-import 'news_page.dart';
+import 'codes_page.dart';
+import 'news/news_page.dart';
 
 class HomePage extends StatefulWidget {
   @override
@@ -15,12 +15,10 @@ class HomePage extends StatefulWidget {
 }
 
 class HomeState extends State<HomePage> {
-  int _index = 0;
+  RxInt index = 0.obs;
 
   void switchIndex(int index) {
-    setState(() {
-      _index = index;
-    });
+    this.index.value = index;
   }
 
   @override
@@ -32,22 +30,24 @@ class HomeState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: Center(
-        child: IndexedStack(
-          index: _index,
-          children: [NewsPage(), MinePage()],
-        ),
-      ),
-      bottomNavigationBar: BottomNavigationBar(
-        selectedItemColor: MyColors.b1_color,
-        unselectedItemColor: MyColors.b3_color,
-        currentIndex: _index,
-        onTap: (index) => {switchIndex(index)},
-        items: const [
-          BottomNavigationBarItem(icon: Icon(Icons.newspaper), label: '内容'),
-          BottomNavigationBarItem(icon: Icon(Icons.account_box), label: '我的')
-        ],
-      ),
+      body: Obx(() => Center(
+            child: IndexedStack(
+              index: index.value,
+              children: [CodesPage(), NewsPage(), MinePage()],
+            ),
+          )),
+      bottomNavigationBar: Obx(() => BottomNavigationBar(
+            selectedItemColor: MyColors.b1_color,
+            unselectedItemColor: MyColors.b3_color,
+            currentIndex: index.value,
+            onTap: (index) => {switchIndex(index)},
+            items: const [
+              BottomNavigationBarItem(icon: Icon(Icons.code), label: '编程'),
+              BottomNavigationBarItem(icon: Icon(Icons.newspaper), label: '新闻'),
+              BottomNavigationBarItem(
+                  icon: Icon(Icons.account_box), label: '我的')
+            ],
+          )),
     );
   }
 }

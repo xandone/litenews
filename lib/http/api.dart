@@ -22,4 +22,6 @@ class Api {
   static const MISSING_SEMESTER_CN="https://missing-semester-cn.github.io/";
 
   static const FULL_STACKACTION="https://www.fullstackaction.com/";
+
+  static const NEWSNOW_BUSIYI="https://newsnow.busiyi.world/";
 }

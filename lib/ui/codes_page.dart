@@ -4,14 +4,14 @@ import 'package:litenews/ui/webbooks/web_book_page.dart';
 
 import '52im/im_list_page.dart';
 
-class NewsPage extends StatefulWidget {
+class CodesPage extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
     return NewsPageState();
   }
 }
 
-class NewsPageState extends State<NewsPage>
+class NewsPageState extends State<CodesPage>
     with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
@@ -54,7 +54,7 @@ class NewsPageState extends State<NewsPage>
             ),
             Expanded(
               child: TabBarView(controller: _tabController, children: <Widget>[
-                MainHellogithubPage(),
+                const MainHellogithubPage(),
                 ImListPage(),
                 WebBookPage(),
               ]),

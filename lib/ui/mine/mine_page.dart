@@ -16,10 +16,8 @@ class MineState extends State<MinePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text('我的'),
-      ),
-      body: Column(
+      body: SafeArea(
+          child: Column(
         children: [
           Card(
             color: MyColors.white,
@@ -66,7 +64,7 @@ class MineState extends State<MinePage> {
             ),
           ),
         ],
-      ),
+      )),
     );
   }
 }
