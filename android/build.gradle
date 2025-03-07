@@ -14,8 +14,8 @@ allprojects {
         maven { url 'https://maven.aliyun.com/repository/gradle' }
         maven{ url 'https://maven.aliyun.com/repository/jcenter'}
 
-        google()
-        mavenCentral()
+//        google()
+//        mavenCentral()
     }
 }
 
