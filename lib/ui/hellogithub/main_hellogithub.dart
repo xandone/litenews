@@ -1,8 +1,9 @@
 import 'package:cached_network_image/cached_network_image.dart';
-import 'package:dio/dio.dart';
+import 'package:dio/dio.dart' as ddio;
 import 'package:easy_refresh/easy_refresh.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_slidable/flutter_slidable.dart';
+import 'package:get/get.dart';
 import 'package:litenews/db/hello_box.dart';
 import 'package:litenews/db/hello_item_dao.dart';
 import 'package:litenews/models/convert_utils.dart';
@@ -10,12 +11,11 @@ import 'package:objectbox/objectbox.dart';
 
 import '../../db/objectbox.dart';
 import '../../http/api.dart';
-import '../../http/http_dio.dart';
 import '../../models/hellogithub/hello_item_bean.dart';
 import '../../objectbox.g.dart';
 import '../../res/colors.dart';
-import '../../utils/logger.dart';
 import '../../utils/my_dialog.dart';
+import 'controller/hellogithub_controller.dart';
 import 'hello_details.dart';
 
 class MainHellogithubPage extends StatefulWidget {
@@ -29,30 +29,24 @@ class MainHellogithubPage extends StatefulWidget {
 
 class MainHellogithubState extends State<MainHellogithubPage>
     with AutomaticKeepAliveClientMixin, SingleTickerProviderStateMixin {
-  List<HelloItemBean> datas = [];
+  HellogithubController controller = Get.put(HellogithubController());
 
   late HelloBox helloBox;
-  late EasyRefreshController _refreshController;
   late final slidablecontroller = SlidableController(this);
 
   @override
   void initState() {
     super.initState();
 
-    _refreshController = EasyRefreshController(
-      controlFinishRefresh: true,
-      controlFinishLoad: true,
-    );
-
     init();
 
-    getList(false);
+    controller.getList(false);
   }
 
   @override
   void dispose() {
     super.dispose();
-    _refreshController.dispose();
+    controller.refreshController.dispose();
     slidablecontroller.dispose();
   }
 
@@ -62,50 +56,21 @@ class MainHellogithubState extends State<MainHellogithubPage>
     helloBox.initBox(box);
   }
 
-  void getList(bool isMore) async {
-    int page = isMore ? datas.length ~/ 10 : 0;
-    page = page + 1;
-
-    Map<String, dynamic> params = Map();
-    params['page'] = page;
-    params['sort_by'] = 'featured';
-    params['rank_by'] = 'newest';
-    params['tid'] = 'all';
-
-    var result = await MyHttp.instance
-        .get('v1/', baseUrl: Api.HELLOGITHUB_API, queryParameters: params);
-
-    setState(() {
-      if (!isMore) {
-        _refreshController.finishRefresh();
-        _refreshController.resetFooter();
-        datas.clear();
-      }
-      for (var item in result['data']) {
-        datas.add(HelloItemBean.fromJson(item));
-      }
-
-      _refreshController.finishLoad(result['has_more']
-          ? IndicatorResult.success
-          : IndicatorResult.noMore);
-    });
-  }
-
   void collectItem(int index) async {
-    save2Db(datas[index]);
+    save2Db(controller.datas[index]);
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: EasyRefresh(
-        controller: _refreshController,
+        controller: controller.refreshController,
         onRefresh: () {
-          getList(false);
+          controller.getList(false);
         },
-        onLoad: () => getList(true),
-        child: ListView.builder(
-            itemCount: datas.length,
+        onLoad: () => controller.getList(true),
+        child: Obx(() => ListView.builder(
+            itemCount: controller.datas.length,
             itemBuilder: (BuildContext context, int index) {
               return GestureDetector(
                 child: Card(
@@ -134,7 +99,7 @@ class MainHellogithubState extends State<MainHellogithubPage>
                         SlidableAction(
                           flex: 1,
                           onPressed: (_) {
-                            download(datas[index]);
+                            download(controller.datas[index]);
                             slidablecontroller.close();
                           },
                           backgroundColor: MyColors.download_color,
@@ -155,12 +120,12 @@ class MainHellogithubState extends State<MainHellogithubPage>
                               CachedNetworkImage(
                                 width: 50,
                                 height: 50,
-                                imageUrl: datas[index].author_avatar,
+                                imageUrl: controller.datas[index].author_avatar,
                                 placeholder: (context, url) =>
-                                    CircularProgressIndicator(),
+                                    const CircularProgressIndicator(),
                                 errorWidget: (context, url, error) =>
-                                    Icon(Icons.error),
-                                httpHeaders: {
+                                    const Icon(Icons.error),
+                                httpHeaders: const {
                                   'referer': Api.HELLOGITHUB_API,
                                 },
                               ),
@@ -175,35 +140,39 @@ class MainHellogithubState extends State<MainHellogithubPage>
                                           children: [
                                             Expanded(
                                                 child: Text(
-                                              datas[index].title,
+                                              controller.datas[index].title,
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontSize: 16,
                                                   color: MyColors.b1_color),
                                             )),
                                             Visibility(
-                                                visible:
-                                                    datas[index].comment_total >
-                                                        0,
+                                                visible: controller.datas[index]
+                                                        .comment_total >
+                                                    0,
                                                 child: Container(
                                                   height: 16,
-                                                  constraints: BoxConstraints(
-                                                      minWidth: 16),
+                                                  constraints:
+                                                      const BoxConstraints(
+                                                          minWidth: 16),
+                                                  decoration:
+                                                      const BoxDecoration(
+                                                          color: MyColors
+                                                              .bl3_color,
+                                                          borderRadius:
+                                                              BorderRadius.all(
+                                                                  Radius
+                                                                      .circular(
+                                                                          4))),
                                                   // padding: EdgeInsets.all(2),
                                                   child: Text(
                                                     textAlign: TextAlign.center,
-                                                    '${datas[index].comment_total}',
-                                                    style: TextStyle(
+                                                    '${controller.datas[index].comment_total}',
+                                                    style: const TextStyle(
                                                         color: MyColors.white,
                                                         fontSize: 12),
                                                   ),
-                                                  decoration: BoxDecoration(
-                                                      color: MyColors.bl3_color,
-                                                      borderRadius:
-                                                          BorderRadius.all(
-                                                              Radius.circular(
-                                                                  4))),
                                                 ))
                                           ],
                                         ),
@@ -211,10 +180,10 @@ class MainHellogithubState extends State<MainHellogithubPage>
                                           children: [
                                             Expanded(
                                                 child: Text(
-                                              datas[index].summary,
+                                              controller.datas[index].summary,
                                               maxLines: 1,
                                               overflow: TextOverflow.ellipsis,
-                                              style: TextStyle(
+                                              style: const TextStyle(
                                                   fontSize: 14,
                                                   color: MyColors.b2_color),
                                             )),
@@ -223,17 +192,19 @@ class MainHellogithubState extends State<MainHellogithubPage>
                                         Row(
                                           children: [
                                             Text(
-                                              datas[index].primary_lang,
-                                              style: TextStyle(
+                                              controller
+                                                  .datas[index].primary_lang,
+                                              style: const TextStyle(
                                                   color: MyColors.b2_color,
                                                   fontSize: 12),
                                             ),
                                             Padding(
-                                              padding:
-                                                  EdgeInsets.only(left: 10),
+                                              padding: const EdgeInsets.only(
+                                                  left: 10),
                                               child: Text(
-                                                datas[index].updated_at,
-                                                style: TextStyle(
+                                                controller
+                                                    .datas[index].updated_at,
+                                                style: const TextStyle(
                                                     fontSize: 12,
                                                     color: MyColors.b2_color),
                                               ),
@@ -251,8 +222,8 @@ class MainHellogithubState extends State<MainHellogithubPage>
                 onTap: () {
                   Navigator.push(context, MaterialPageRoute(builder: (context) {
                     return HelloDetailsPage(
-                      arguments:
-                          HelloDetailsArguments(itemId: datas[index].item_id),
+                      arguments: HelloDetailsArguments(
+                          itemId: controller.datas[index].item_id),
                     );
                   }));
                 },
@@ -260,7 +231,7 @@ class MainHellogithubState extends State<MainHellogithubPage>
                   // _showDialog(datas[index]);
                 },
               );
-            }),
+            })),
       ),
     );
   }
@@ -300,8 +271,8 @@ class MainHellogithubState extends State<MainHellogithubPage>
 
   void download(HelloItemBean bean) async {
     MyDialog.showLoading(msg: '下载中');
-    Dio dio = Dio();
-    Response response =
+    ddio.Dio dio = ddio.Dio();
+    ddio.Response response =
         await dio.get('${Api.HELLOGITHUB_PAGE}/repository/${bean.item_id}');
     String content = response.data.toString();
     // Log.d(content);
