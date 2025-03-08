@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:get/get_core/src/get_main.dart';
+import 'package:litenews/res/colors.dart';
 import 'package:litenews/ui/news/hot/hot_list_page.dart';
 
 import 'controller/hot_controller.dart';
@@ -30,14 +31,10 @@ class HotPage extends StatefulWidget {
 class _HotState extends State<HotPage> with SingleTickerProviderStateMixin {
   late TabController _tabController;
 
-  HotController controller = Get.put(HotController());
-
   @override
   void initState() {
     super.initState();
     _tabController = TabController(length: titleTabs.length, vsync: this);
-
-    controller.getList();
   }
 
   @override
@@ -48,6 +45,8 @@ class _HotState extends State<HotPage> with SingleTickerProviderStateMixin {
           controller: _tabController,
           tabAlignment: TabAlignment.start,
           isScrollable: true,
+          labelColor: MyColors.b1_color,
+          unselectedLabelColor: MyColors.b3_color,
           tabs: titleTabs.map((it) => Tab(text: it)).toList(),
         ),
         Expanded(

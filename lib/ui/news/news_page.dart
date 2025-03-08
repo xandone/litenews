@@ -1,5 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:litenews/res/colors.dart';
 import 'package:litenews/ui/news/hot/hot_page.dart';
 
 /// @author: xiao
